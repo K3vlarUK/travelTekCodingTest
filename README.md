@@ -1,3 +1,5 @@
+Created with the help of node packages express, nodemon, cors, xml2json and moment.
+
 ## Server
 
 Navigate to the server directory.

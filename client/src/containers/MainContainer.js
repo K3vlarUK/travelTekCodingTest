@@ -10,6 +10,7 @@ class MainContainer extends Component {
         this.findAllSwedishArrivals = this.findAllSwedishArrivals.bind(this);
         this.findAllMorningFlights = this.findAllMorningFlights.bind(this);
         this.calculateAverageDubaiFlightTime = this.calculateAverageDubaiFlightTime.bind(this);
+        this.calculateMostPopularDestinations = this.calculateMostPopularDestinations.bind(this);
     }
 
     componentDidMount() {
@@ -53,6 +54,35 @@ class MainContainer extends Component {
     }
 
     // Calculate the 10 most popular destinations
+    calculateMostPopularDestinations() {
+        // Map all destination airport codes to a new array.
+        const destinations = this.state.flights.map((flight) => {
+            return flight.destair;
+        })
+        // Create an empty object to track IATA codes with occurences.
+        const occurences = {};
+        // Fill the object with key value pairs
+        for (let i = 0; i < destinations.length; i++) {
+            occurences[destinations[i]] = (occurences[destinations[i]] || 0 ) +1;  
+        }
+        // Create an empty array that we can use to sort the travel occurences
+        let sortedOccurences = [];
+        // Loop through the occurences object and map each destination and visit number to an array within the new Array we have created.
+        for (const visit in occurences) {
+            sortedOccurences.push([visit, occurences[visit]]);
+        }
+        // Sort this array in descending order to give us the most visited.
+        sortedOccurences.sort((a, b) => {
+            return b[1] - a[1];
+        });
+        // Only return the 10 most visited.
+        let topTen = sortedOccurences.slice(0, 9);
+        return (
+            <ul>
+                {topTen.map(dest => <li>{dest[0]}</li>)}
+            </ul>
+        );
+    }
     
     // Calculate the average time between LHR and DXB
     calculateAverageDubaiFlightTime() {
@@ -96,6 +126,8 @@ class MainContainer extends Component {
                 <div>
                     <p>There is {this.findAllMorningFlights()} morning flights.</p>
                     <p>Only {this.findAllSwedishArrivals()}% of flights in this data fly into Sweden.</p>
+                    <h4>The top 10 destinations are: </h4>
+                    <p>{this.calculateMostPopularDestinations()}</p>
                     <p>{this.calculateAverageDubaiFlightTime()}</p>
                 </div>
             </div>
