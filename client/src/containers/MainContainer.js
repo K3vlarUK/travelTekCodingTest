@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import Request from '../helpers/request';
-import { stat } from 'fs';
 import moment from 'moment';
 
 class MainContainer extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            flights: [],
-            swedishArrivals: 0
+            flights: []
         }
         this.findAllSwedishArrivals = this.findAllSwedishArrivals.bind(this);
         this.findAllMorningFlights = this.findAllMorningFlights.bind(this);
@@ -65,7 +62,7 @@ class MainContainer extends Component {
         // Loop through flight data
         this.state.flights.forEach(flight => {
             // If the flights depair = LHR and destair = DXB
-            if (flight.depair == "LHR" && flight.destair == "DXB"){
+            if (flight.depair === "LHR" && flight.destair === "DXB"){
                 // Add 2 to counter for return flight
                 counter += 2;
                 // Subtract the flights arrival time from the departure Time and add to the DurationTotal for Inbound flights.
@@ -98,7 +95,7 @@ class MainContainer extends Component {
             <div>
                 <div>
                     <p>There is {this.findAllMorningFlights()} morning flights.</p>
-                    <p>Only {this.findAllSwedishArrivals()}% of flights on this data fly into Sweden.</p>
+                    <p>Only {this.findAllSwedishArrivals()}% of flights in this data fly into Sweden.</p>
                     <p>{this.calculateAverageDubaiFlightTime()}</p>
                 </div>
             </div>
