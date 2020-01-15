@@ -10,6 +10,7 @@ class MainContainer extends Component {
             swedishArrivals: 0
         }
         this.findAllSwedishArrivals = this.findAllSwedishArrivals.bind(this);
+        this.findAllMorningFlights = this.findAllMorningFlights.bind(this);
     }
 
     componentDidMount() {
@@ -22,6 +23,19 @@ class MainContainer extends Component {
         .then(data => {
             this.setState({flights: data})
         })
+    }
+
+    // Calculate how many flights are in the morning
+    findAllMorningFlights() {
+       let counter = 0;
+       // Loop through the array of flights
+       this.state.flights.forEach(flight => {
+           // If the flights indeparttime is before 12:00:00AM then add to counter
+           if (flight.indeparttime < "12:00:00"){
+               counter ++;
+           }
+       })
+       return counter;
     }
 
     // Calculate how many flights arrive in airports with swedish IATA codes (Seems to only be ARN and GOT)
@@ -43,6 +57,7 @@ class MainContainer extends Component {
         return ( 
             <div>
                 <div>
+                    <p>There is {this.findAllMorningFlights()} morning flights.</p>
                     <p>Only {this.findAllSwedishArrivals()}% of flights on this data fly into Sweden.</p>
                 </div>
             </div>
