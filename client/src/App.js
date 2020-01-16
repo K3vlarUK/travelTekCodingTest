@@ -4,7 +4,7 @@ import MainContainer from './containers/MainContainer';
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <h1>TravelTek Coding Test</h1>
       <MainContainer />
     </div>

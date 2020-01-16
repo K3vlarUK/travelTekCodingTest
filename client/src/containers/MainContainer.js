@@ -11,6 +11,8 @@ class MainContainer extends Component {
         this.findAllMorningFlights = this.findAllMorningFlights.bind(this);
         this.calculateAverageDubaiFlightTime = this.calculateAverageDubaiFlightTime.bind(this);
         this.calculateMostPopularDestinations = this.calculateMostPopularDestinations.bind(this);
+        this.findMostExpensiveFlight = this.findMostExpensiveFlight.bind(this);
+        this.findCheapestFlight = this.findCheapestFlight.bind(this);
     }
 
     componentDidMount() {
@@ -40,14 +42,18 @@ class MainContainer extends Component {
 
     // Calculate how many flights arrive in airports with swedish IATA codes (Seems to only be ARN and GOT)
     findAllSwedishArrivals() {
+        // Create an array of biggest airports in sweden.
+        const swedishAirports = ["ARN", "GOT", "BMA", "NYO", "MMX", "LLA", "UME", "GSE", "OSD", "VBY", "AGH", "KRN", "SDL", "RNB", "SFT", "KLR", "VXO", "VST", "NRK"]
         let counter = 0;
         // Loop through our Array of flights from the state
         this.state.flights.forEach(flight => {
-            // If the flights Destair is includes the swedish IATA codes then add 1 to counter.
-            if (flight.destair.includes("ARN") || flight.destair.includes("GOT")) {
-                counter ++;
+            // Loop through the airport array
+            for (let i = 0; i < swedishAirports.length; i++) {
+                // If the flights Destair is includes the swedish IATA codes then add 1 to counter.
+                if (flight.destair.includes(swedishAirports[i])) {
+                    counter ++;
+                }
             }
-            
         })
         // Return the number of flights a percentage of all flights in data
         return (counter / this.state.flights.length).toFixed(4);
@@ -79,7 +85,7 @@ class MainContainer extends Component {
         let topTen = sortedOccurences.slice(0, 9);
         return (
             <ul>
-                {topTen.map(dest => <li>{dest[0]}</li>)}
+                {topTen.map((dest, index) => <li key={index}>{dest[0]} with {dest[1]} visits</li>)}
             </ul>
         );
     }
@@ -120,6 +126,27 @@ class MainContainer extends Component {
         return `The average flight time between LHR and DXB is ${averageHours} hours and ${averageMinutes} minutes.`
     }
 
+    // What is the most expensive flight of the data? How about the cheapest?
+    findMostExpensiveFlight() {
+        const prices = this.state.flights.map(flight => {
+            return parseFloat(flight.originalprice);
+        })
+        const descendingPrices = prices.sort((a,b) => {
+            return b - a;
+        });
+        return descendingPrices[0];
+    }
+
+    findCheapestFlight() {
+        const prices = this.state.flights.map(flight => {
+            return parseFloat(flight.originalprice);
+        })
+        const ascendingPrices = prices.sort((a,b) => {
+            return a - b;
+        });
+        return ascendingPrices[0];
+    }
+
     render() { 
         return ( 
             <div>
@@ -127,8 +154,9 @@ class MainContainer extends Component {
                     <p>There is {this.findAllMorningFlights()} morning flights.</p>
                     <p>Only {this.findAllSwedishArrivals()}% of flights in this data fly into Sweden.</p>
                     <h4>The top 10 destinations are: </h4>
-                    <p>{this.calculateMostPopularDestinations()}</p>
+                    {this.calculateMostPopularDestinations()}
                     <p>{this.calculateAverageDubaiFlightTime()}</p>
+                    <p>The most expesive flight was £{this.findMostExpensiveFlight()} whereas the cheapest was only £{this.findCheapestFlight()}</p>
                 </div>
             </div>
          );
