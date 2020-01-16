@@ -2,7 +2,7 @@ Created with the help of node packages express, nodemon, cors, xml2json and mome
 
 ## Server
 
-Navigate to the server directory.
+Navigate to the server directory. (If on windows, it only seems to work if you run as administrator, seems to be a windows xml2json issue)
 
 `npm install` will install required dependancies.
 
