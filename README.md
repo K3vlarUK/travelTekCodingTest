@@ -1,5 +1,7 @@
 Created with the help of node packages express, nodemon, cors, xml2json and moment.
 
+# Please Start up the server before starting up the client.
+
 ## Server
 
 Navigate to the server directory. (If on windows, it only seems to work if you run as administrator, seems to be a windows xml2json issue)
